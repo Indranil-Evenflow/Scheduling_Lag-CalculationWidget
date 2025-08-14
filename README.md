@@ -1,113 +1,64 @@
-## Scheduling Lag Analysis Dashboard
+# Scheduling Lag Calculation Widget
 
-![alt text](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://scheduling-lag-calculation-widget.streamlit.app/)
+
+A user-friendly web application built with Streamlit designed for non-technical teams to instantly analyze appointment scheduling efficiency. The tool automatically processes raw data exports, handles messy file formats, and generates an interactive report with visualizations and a downloadable Excel summary.
 
 
-![alt text](https://img.shields.io/badge/python-3.9+-blue.svg)
+*The clean and professional dashboard interface.*
 
+---
 
-![alt text](https://img.shields.io/badge/License-MIT-yellow.svg)
+## ✨ Key Features
 
-An intelligent web application that automates the analysis of appointment scheduling lag. This tool ingests complex data files from system exports, dynamically finds the relevant data, and produces a clean, interactive report with downloadable insights.
+*   **🧠 Intelligent File Parsing:** Automatically detects header rows, even in files with metadata at the top.
+*   **📂 Multi-format Support:** Accepts both `.csv` and `.xlsx` files with various delimiters (comma or tab).
+*   **⚙️ Automated Analysis:** Performs all required calculations, including pivoting, grand totals, and cumulative percentages.
+*   **📊 Interactive Visualizations:** Displays a clean bar chart using Plotly for easy comparison of performance.
+*   **📥 One-Click Export:** Generates a comprehensive, professionally formatted multi-sheet Excel report for download.
+*   **🛡️ Robust Error Handling:** Guides the user with clear messages if the file format is incorrect or corrupted.
 
-🚀 Live Demo
+## 🚀 How to Use the Live App
 
-Experience the live application here:
+1.  **Navigate** to the application URL: [scheduling-lag-calculation-widget.streamlit.app](https://scheduling-lag-calculation-widget.streamlit.app/)
+2.  **Upload** your raw appointment data file using the file uploader in the sidebar.
+3.  **Click** the "Analyze Data" button.
+4.  **View** the interactive KPI metrics, chart, and data summary on the dashboard.
+5.  **Download** the full, formatted report as an Excel file.
 
-➡️ scheduling-lag-calculation-widget.streamlit.app
+---
 
-✨ Key Features
+## 🛠️ Local Setup and Installation
 
-Dynamic Header Detection: Intelligently scans files to find the true data table, skipping metadata and empty rows.
+To run this application on your local machine, follow these steps.
 
-Multi-Format Support: Seamlessly processes .csv and .xlsx files, automatically detecting tab or comma separators.
+### Prerequisites
 
-Automated Data Cleaning: Handles common data issues, like numbers with commas (109,874), ensuring accurate calculations.
+*   Python 3.9+
+*   `pip` package manager
 
-Interactive Visualizations: Generates an interactive bar chart using Plotly to visualize cumulative percentages over time.
+### Installation
 
-Full Report Generation: Produces a comprehensive, multi-sheet Excel report with the raw data and all analysis tables.
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/Indranil-Evenflow/Scheduling_Lag-CalculationWidget.git
+    cd Scheduling_Lag-CalculationWidget
+    ```
 
-Elegant User Interface: A clean, modern, and intuitive interface built with Streamlit.
+2.  **Install the required packages:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-🛠️ Technology Stack
+3.  **Run the Streamlit application:**
+    ```bash
+    streamlit run app.py
+    ```
+    The application will open in your default web browser.
 
-Frontend: Streamlit
+## ⚙️ Technology Stack
 
-Data Processing: Pandas, NumPy
-
-Excel/File Handling: Openpyxl
-
-Visualization: Plotly Express
-
-⚙️ Setup and Local Installation
-
-To run this application on your local machine, follow these steps:
-
-Clone the repository:
-
-code
-Bash
-download
-content_copy
-expand_less
-
-git clone https://github.com/your-username/scheduling-lag-dashboard.git
-cd scheduling-lag-dashboard
-
-Create and activate a virtual environment:
-
-code
-Bash
-download
-content_copy
-expand_less
-IGNORE_WHEN_COPYING_START
-IGNORE_WHEN_COPYING_END
-# For macOS/Linux
-python3 -m venv venv
-source venv/bin/activate
-
-# For Windows
-python -m venv venv
-.\venv\Scripts\activate
-
-Install the required dependencies:
-
-code
-Bash
-download
-content_copy
-expand_less
-IGNORE_WHEN_COPYING_START
-IGNORE_WHEN_COPYING_END
-pip install -r requirements.txt
-
-(Note: You will need to create a requirements.txt file containing streamlit, pandas, numpy, openpyxl, and plotly.)
-
-Run the Streamlit application:
-
-code
-Bash
-download
-content_copy
-expand_less
-IGNORE_WHEN_COPYING_START
-IGNORE_WHEN_COPYING_END
-streamlit run app.py
-
-Your browser will automatically open with the local version of the app.
-
-📂 Project Structure
-
-The project is structured to separate the core logic from the user interface for maintainability:
-
-process_data.py: Contains all the robust backend logic for file reading, data cleaning, and table generation.
-
-app.py: Contains all the Streamlit code for the front-end user interface, visualizations, and user interactions.
-
-requirements.txt: Lists all the project dependencies.
-
-📄 License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
+*   **Frontend & UI:** Streamlit
+*   **Data Manipulation:** Pandas & NumPy
+*   **File Parsing:** OpenPyXL
+*   **Data Visualization:** Plotly Express
