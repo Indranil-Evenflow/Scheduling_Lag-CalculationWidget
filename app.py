@@ -90,7 +90,7 @@ with col1:
         type=['csv', 'xlsx', 'xls']
     )
 
-    process_button = st.button("Analyze Data", disabled=(uploaded_file is None))
+    process_button = st.button("Analyse Data", disabled=(uploaded_file is None))
 
 
 if process_button:
