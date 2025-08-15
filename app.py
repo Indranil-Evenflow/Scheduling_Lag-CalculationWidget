@@ -105,62 +105,73 @@ if process_button:
             st.error(f"An error occurred during processing: {e}")
             st.error("Please ensure your file has the correct columns ('scheduling_lag', 'evenflow_flag', 'active_appointment_count') and is not corrupted.")
             st.session_state['processed'] = False
-        # else:
-        #     st.success("Analysis complete! You can now download the report.")
     
-    with col1:
-        # Offer download link
-        st.markdown("### Full Report")
-        with open(st.session_state['output_path'], 'rb') as f:
-            st.download_button(
-                label="Download Excel Report",
-                data=f,
-                file_name='Scheduling Lag Calculation Output.xlsx',
-                mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    if st.session_state.get('processed', False):
+        with col1:
+            st.markdown("### Full Report")
+            with open(st.session_state['output_path'], 'rb') as f:
+                st.download_button(
+                    label="Download Excel Report",
+                    data=f,
+                    file_name='Scheduling Lag Calculation Output.xlsx',
+                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                )
+
+        with col2:
+            st.subheader("Percentage of Total: Within 1 Week ")
+            summary_df = st.session_state['summary_df']
+            
+            display_df = summary_df.copy()
+            for col in display_df.columns:
+                if '%' in col:
+                    display_df[col] = display_df[col].apply(lambda x: f'{x:.0%}' if pd.notnull(x) else 'N/A')
+            
+            st.dataframe(display_df.set_index('scheduling_lag'), use_container_width=True)
+
+            chart_df = summary_df.melt(
+                id_vars=['scheduling_lag'], 
+                value_vars=[col for col in summary_df.columns if '%' in col],
+                var_name='EvenFlow Category',
+                value_name='Cumulative Percentage'
             )
 
-    with col2:
-        st.subheader("Percentage of Total: Within 1 Week ")
-        summary_df = st.session_state['summary_df']
-        
-        # Format the dataframe for better display
-        display_df = summary_df.copy()
-        for col in display_df.columns:
-            if '%' in col:
-                display_df[col] = display_df[col].apply(lambda x: f'{x:.0%}' if pd.notnull(x) else 'N/A')
-        
-        st.dataframe(display_df.set_index('scheduling_lag'), use_container_width=True)
+            # --- MODIFIED CHART SECTION ---
 
-        # Prepare data for the bar chart
-        chart_df = summary_df.melt(
-            id_vars=['scheduling_lag'], 
-            value_vars=[col for col in summary_df.columns if '%' in col],
-            var_name='EvenFlow Category',
-            value_name='Cumulative Percentage'
-        )
+            # 1. Prepare a text label column for the chart
+            # This formats the numeric percentage (e.g., 0.55) into a display string (e.g., "55.0%")
+            chart_df['text_label'] = chart_df['Cumulative Percentage'].apply(
+                lambda x: f'{x:.0%}' if pd.notnull(x) else ''
+            )
 
-        # Create the bar chart
-        fig = px.bar(
-            chart_df,
-            x='scheduling_lag',
-            y='Cumulative Percentage',
-            color='EvenFlow Category',
-            barmode='group',
-            title='Cumulative Percentage by Scheduling Lag',
-            labels={'scheduling_lag': 'Scheduling Lag (Days)', 'Cumulative Percentage': 'Cumulative % of Total Appointments'},
-            text_auto='.0%'
-        )
-        fig.update_layout(
-            xaxis_title="Scheduling Lag (Days)",
-            yaxis_title="Cumulative Percentage",
-            legend_title="EvenFlow Flag"
-        )
-        st.plotly_chart(fig, use_container_width=True)
+            # 2. Create the line chart, now passing the new 'text' column
+            fig = px.line(
+                chart_df,
+                x='scheduling_lag',
+                y='Cumulative Percentage',
+                color='EvenFlow Category',
+                markers=True,
+                text='text_label',  # Use the formatted text for data labels
+                title='Cumulative Percentage Growth by Scheduling Lag',
+                labels={'scheduling_lag': 'Scheduling Lag (Days)', 'Cumulative Percentage': 'Cumulative % of Total'}
+            )
 
+            # 3. Update layout and traces to position the text labels neatly
+            fig.update_layout(
+                xaxis_title="Scheduling Lag (Days)",
+                yaxis_title="Cumulative Percentage",
+                legend_title="EvenFlow Flag",
+                yaxis_tickformat='.0%'
+            )
+            fig.update_traces(
+                textposition='top center' # Position the text just above the marker
+            )
 
+            # --- END OF MODIFIED CHART SECTION ---
+            
+            st.plotly_chart(fig, use_container_width=True)
 
-        st.markdown("""
-    <div class="footer">
-        An EvenFlow AI Tool (Version 1.0) - All rights reserved 2025
-    </div>
-""", unsafe_allow_html=True)
+            st.markdown("""
+                <div class="footer">
+                    An EvenFlow AI Tool (Version 1.0) - All rights reserved 2025
+                </div>
+            """, unsafe_allow_html=True)
